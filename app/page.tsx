@@ -6,12 +6,26 @@
 // import { siteConfig } from '@/config/site';
 // import { title, subtitle } from '@/components/primitives';
 // import { GithubIcon } from '@/components/icons';
+import * as actions from '@/actions';
+import { auth } from '@/auth';
+import Profile from '@/components/profile';
 import { Button } from '@heroui/button';
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <div>
-      <Button>Click me</Button>
+      <form action={actions.signIn}>
+        <Button type="submit">Sign In</Button>
+      </form>
+
+      <form action={actions.signOut}>
+        <Button type="submit">Sign Out</Button>
+      </form>
+
+      {session?.user ? <div>Signed In {JSON.stringify(session.user)}</div> : <div>Signed Out</div>}
+      <Profile />
     </div>
     // <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
     //   <div className="inline-block max-w-xl text-center justify-center">
