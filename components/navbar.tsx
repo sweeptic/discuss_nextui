@@ -7,20 +7,40 @@ import Link from 'next/link';
 import { Input } from '@heroui/input';
 import { Button } from '@heroui/button';
 
+import * as actions from '@/actions';
+import { Popover, PopoverContent, PopoverTrigger } from '@heroui/popover';
+
 export const Navbar = async () => {
   const session = await auth();
   let authContent: React.ReactNode;
 
   if (session?.user) {
-    authContent = <Avatar src={session.user.image || ''}></Avatar>;
+    authContent = (
+      <Popover placement="left">
+        <PopoverTrigger>
+          <Avatar src={session.user.image || ''} />
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="p-4">
+            <form action={actions.signOut}>
+              <Button type="submit">Sign Out</Button>
+            </form>
+          </div>
+        </PopoverContent>
+      </Popover>
+    );
   } else {
     authContent = (
       <>
         <NavbarItem className="flex">
-          <Button type="button">Sign In</Button>
+          <form action={actions.signIn}>
+            <Button type="submit">Sign In</Button>
+          </form>
         </NavbarItem>
         <NavbarItem>
-          <Button type="button">Sign Out</Button>
+          <form action={actions.signOut}>
+            <Button type="button">Sign Out</Button>
+          </form>
         </NavbarItem>
       </>
     );
@@ -33,13 +53,13 @@ export const Navbar = async () => {
           <Link href="/">Discuss</Link>
         </NavbarBrand>
 
-        <NavbarContent className="basis-1/5 sm:basis-full" justify="center">
-          <NavbarItem>
-            <Input />
-          </NavbarItem>
-        </NavbarContent>
+        {/* <NavbarContent className="basis-1/5 sm:basis-full" justify="center"> */}
+        <NavbarItem>
+          <Input />
+        </NavbarItem>
+        {/* </NavbarContent> */}
 
-        <NavbarContent className="basis-1/5 sm:basis-full" justify="end"></NavbarContent>
+        {/* <NavbarContent className="basis-1/5 sm:basis-full" justify="end"></NavbarContent> */}
       </NavbarContent>
 
       <NavbarContent className=" sm:flex basis-1/5 sm:basis-full" justify="end">
