@@ -1,4 +1,4 @@
-import { Navbar as HeroUINavbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { Navbar as HeroUINavbar, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Avatar } from '@heroui/avatar';
 
 import { ThemeSwitch } from '@/components/theme-switch';
@@ -49,21 +49,17 @@ export const Navbar = async () => {
   return (
     <HeroUINavbar maxWidth="xl" position="sticky" className="bg-gray-200 mb-4">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
+        <NavbarItem>
           <Link href="/">Discuss</Link>
-        </NavbarBrand>
+        </NavbarItem>
 
-        {/* <NavbarContent className="basis-1/5 sm:basis-full" justify="center"> */}
         <NavbarItem>
           <Input />
         </NavbarItem>
-        {/* </NavbarContent> */}
-
-        {/* <NavbarContent className="basis-1/5 sm:basis-full" justify="end"></NavbarContent> */}
       </NavbarContent>
 
       <NavbarContent className=" sm:flex basis-1/5 sm:basis-full" justify="end">
-        <NavbarItem className=" sm:flex gap-2">{authContent}</NavbarItem>
+        {authContent}
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
