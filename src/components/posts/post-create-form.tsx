@@ -1,10 +1,15 @@
 'use client';
 
-import { Input, Popover, PopoverTrigger, Button, PopoverContent } from '@nextui-org/react';
+import { Input, Popover, PopoverTrigger, Button, PopoverContent, Textarea } from '@nextui-org/react';
 import * as actions from '@/actions';
 import FormButton from '../button';
+import { useFormState } from 'react-dom';
 
 export default function PostCreateForm() {
+  const [formState, action] = useFormState(actions.createPost, {
+    errors: {},
+  });
+
   return (
     <Popover placement="left">
       <PopoverTrigger>
@@ -12,7 +17,7 @@ export default function PostCreateForm() {
       </PopoverTrigger>
 
       <PopoverContent>
-        <form action={actions.createPost}>
+        <form action={action}>
           <div className="flex flex-col gap-4 p-4 w-80">
             <h3 className="text-lg">Create a Post</h3>
 
@@ -21,17 +26,17 @@ export default function PostCreateForm() {
               label="Title"
               labelPlacement="outside"
               placeholder="Title"
-              //   isInvalid={!!formState.errors.name}
-              //   errorMessage={formState.errors.name?.join(', ')}
+              isInvalid={!!formState.errors.title}
+              errorMessage={formState.errors.title?.join(', ')}
             />
 
-            <Input
+            <Textarea
               name="content"
               label="Content"
               labelPlacement="outside"
               placeholder="Content"
-              //   isInvalid={!!formState.errors.name}
-              //   errorMessage={formState.errors.name?.join(', ')}
+              isInvalid={!!formState.errors.content}
+              errorMessage={formState.errors.content?.join(', ')}
             />
 
             {/* {formState.errors._form ? (
