@@ -3,7 +3,7 @@
 import { useFormState } from 'react-dom';
 import { Input, Button, Textarea, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
 import * as actions from '@/actions';
-import ButtonElement from '../button';
+import FormButton from '../button';
 
 export default function TopicCreateForm() {
   const [formState, action] = useFormState(actions.createTopic, {
@@ -41,7 +41,7 @@ export default function TopicCreateForm() {
               <div className="rounded p-2 bg-red-200 border border-red-400">{formState.errors._form?.join(', ')}</div>
             ) : null}
 
-            <ButtonElement>Submit</ButtonElement>
+            <FormButton>Submit</FormButton>
           </div>
         </form>
       </PopoverContent>

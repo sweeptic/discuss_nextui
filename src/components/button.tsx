@@ -5,7 +5,7 @@ interface FormButtonProps {
   children: React.ReactNode;
 }
 
-export default function ButtonElement({ children }: FormButtonProps) {
+export default function FormButton({ children }: FormButtonProps) {
   const { pending } = useFormStatus();
 
   return (
