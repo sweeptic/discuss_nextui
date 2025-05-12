@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
+import { db } from '@/db';
 import { z } from 'zod';
 
 const createPostSchema = z.object({
@@ -15,10 +16,13 @@ interface CreatePostFormState {
     _form?: string[];
   };
 }
-export async function createPost(formState: CreatePostFormState, formData: FormData): Promise<CreatePostFormState> {
+export async function createPost(
+  slug: string,
+  formState: CreatePostFormState,
+  formData: FormData
+): Promise<CreatePostFormState> {
   // TODO: revalidate the topic show page
 
-  //   export async function createTopic(formState: CreatePostFormState, formData: FormData): Promise<CreatePostFormState> {
   //   console.log('stop...');
   //   await new Promise((resolve, rejected) => setTimeout(resolve, 2000));
   //   console.log('go...');
@@ -42,17 +46,20 @@ export async function createPost(formState: CreatePostFormState, formData: FormD
     };
   }
 
-  return {
-    errors: {},
-  };
-  //   let topic: Topic;
   //   try {
-  //     topic = await db.topic.create({
-  //       data: {
-  //         slug: result.data.name,
-  //         description: result.data.description,
-  //       },
-  //     });
+  const topic = await db.topic.findFirst({
+    where: {
+      slug: slug,
+    },
+  });
+
+  if (!topic) {
+    return {
+      errors: {
+        _form: ['Cannot find topic'],
+      },
+    };
+  }
   //   } catch (err: unknown) {
   //     if (err instanceof Error) {
   //       return {
@@ -70,4 +77,8 @@ export async function createPost(formState: CreatePostFormState, formData: FormD
   //   }
   //   revalidatePath('/');
   //   redirect(paths.topicShow(topic.slug));
+
+  return {
+    errors: {},
+  };
 }
