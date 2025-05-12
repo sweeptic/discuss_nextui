@@ -1,5 +1,6 @@
 'use server';
 
+import { auth } from '@/auth';
 import { z } from 'zod';
 
 const createPostSchema = z.object({
@@ -32,17 +33,18 @@ export async function createPost(formState: CreatePostFormState, formData: FormD
     };
   }
 
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      errors: {
+        _form: ['You must be signed in to do this.'],
+      },
+    };
+  }
+
   return {
     errors: {},
   };
-  //   const session = await auth();
-  //   if (!session || !session.user) {
-  //     return {
-  //       errors: {
-  //         _form: ['You must be signed in to do this.'],
-  //       },
-  //     };
-  //   }
   //   let topic: Topic;
   //   try {
   //     topic = await db.topic.create({
