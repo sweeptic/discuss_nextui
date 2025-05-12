@@ -2,6 +2,10 @@
 
 import { auth } from '@/auth';
 import { db } from '@/db';
+import paths from '@/paths';
+import { Post } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const createPostSchema = z.object({
@@ -46,7 +50,6 @@ export async function createPost(
     };
   }
 
-  //   try {
   const topic = await db.topic.findFirst({
     where: {
       slug: slug,
@@ -60,25 +63,36 @@ export async function createPost(
       },
     };
   }
-  //   } catch (err: unknown) {
-  //     if (err instanceof Error) {
-  //       return {
-  //         errors: {
-  //           _form: [err.message],
-  //         },
-  //       };
-  //     } else {
-  //       return {
-  //         errors: {
-  //           _form: ['Something went wrong'],
-  //         },
-  //       };
-  //     }
-  //   }
-  //   revalidatePath('/');
-  //   redirect(paths.topicShow(topic.slug));
 
-  return {
-    errors: {},
-  };
+  let post: Post;
+  try {
+    post = await db.post.create({
+      data: {
+        title: result.data.title,
+        content: result.data.content,
+        userId: session.user.id,
+        topicId: topic.id,
+      },
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return {
+        errors: {
+          _form: [err.message],
+        },
+      };
+    } else {
+      return {
+        errors: {
+          _form: ['Failed to create post'],
+        },
+      };
+    }
+  }
+  revalidatePath(paths.topicShow(slug));
+  redirect(paths.postShow(slug, post.id));
+
+  //   return {
+  //     errors: {},
+  //   };
 }
