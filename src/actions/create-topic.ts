@@ -27,10 +27,10 @@ interface CreateTopicFormState {
 }
 
 export async function createTopic(formState: CreateTopicFormState, formData: FormData): Promise<CreateTopicFormState> {
-  console.log('stop...');
+  console.log('waiting...');
 
-  await new Promise((resolve, rejected) => setTimeout(resolve, 2000));
-  console.log('go...');
+  await new Promise((resolve, rejected) => setTimeout(resolve, 500));
+  console.log('continue');
 
   const result = createTopicSchema.safeParse({
     name: formData.get('name'),
